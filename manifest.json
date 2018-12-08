@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "Messenger Emoji",
+  "description": "Uses the old (best) emoji set from fb messenger",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["https://www.facebook.com/*", "https://www.messenger.com/*"],
+      "js": ["emoji.js"]
+    }
+  ]
+}
