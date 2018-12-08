@@ -1180,15 +1180,49 @@ const urls = [
   "flag-for-united-states_1f1fa-1f1f8.png",
   "flag-for-vietnam_1f1fb-1f1f3.png",
   "flag-for-south-africa_1f1ff-1f1e6.png"
-]
-const doc = window.document
-doc.body.style.backgroundColor = "red";
-const preURL = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/facebook/65/"
+];
+
+const doc = window.document;
+const preURL = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/facebook/65/";
+
+
+const observerConfig = {
+  childList: true,
+  subtree: true,
+};
+
+const chatObserverCallback = function(mutationsList) {
+  for (let mutation of mutationsList) {
+    if (mutation.type === "childList") {
+      freeBSD();
+    }
+  }
+};
+
+let chatObserver = new MutationObserver(chatObserverCallback);
+
+const chatSectionObserverCallback = function(mutationsList) {
+  for (let mutation of mutationsList) {
+    if (mutation.type === "childList") {
+      const chatWindows = doc.getElementsByClassName("fbNubFlyout fbDockChatTabFlyout uiContextualLayerParent");
+      for (let chatWindow of chatWindows) {
+        chatObserver.observe(chatWindow, observerConfig);
+      }
+    }
+  }
+}
+
+let chatSectionObserver = new MutationObserver(chatSectionObserverCallback)
+
+const chatSection = doc.getElementById("ChatTabsPagelet");
+chatSectionObserver.observe(chatSection, observerConfig);
+
+
 function freeBSD() {
   const x = []
   const y = doc.body.getElementsByTagName("img")
   for (let i = 0; i < y.length; ++i) {
-    if (y[i].className.includes("_1ift _1ifu img")) {
+    if (y[i].className.includes("_1ift")) {
       x.push(y[i]);
     }
   }
@@ -1200,14 +1234,10 @@ function freeBSD() {
       })
       if (path !== undefined) {
         const newEmoji = preURL + path;
-        console.log(newEmoji);
         if (e.src.substring(18) !== "https://emojipedia") {
           e.src = newEmoji;
         }
       }
     })
   }
-  setTimeout(freeBSD, 500);
 }
-
-freeBSD();
