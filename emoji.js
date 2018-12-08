@@ -1217,17 +1217,10 @@ let chatSectionObserver = new MutationObserver(chatSectionObserverCallback)
 const chatSection = doc.getElementById("ChatTabsPagelet");
 chatSectionObserver.observe(chatSection, observerConfig);
 
-
 function freeBSD() {
-  const x = []
-  const y = doc.body.getElementsByTagName("img")
-  for (let i = 0; i < y.length; ++i) {
-    if (y[i].className.includes("_1ift")) {
-      x.push(y[i]);
-    }
-  }
-  if (x.length) {
-    x.forEach(function(e) {
+  const x = doc.body.getElementsByClassName("_1ift");
+  for (let i = 0; i < x.length; ++i) {
+    const e = x[i];
       const code = e.src.split("/").pop().split(".")[0];
       const path = urls.find(function(url) {
         return url.includes(code);
@@ -1238,6 +1231,5 @@ function freeBSD() {
           e.src = newEmoji;
         }
       }
-    })
-  }
+    }
 }
