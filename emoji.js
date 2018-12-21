@@ -1186,27 +1186,28 @@ const doc = window.document;
 const preURL = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/facebook/65/";
 
 
-const observerConfig = {
+const chatObserverConfig = {
   childList: true,
   subtree: true,
 };
 
 const chatObserverCallback = function(mutationsList) {
-  for (let mutation of mutationsList) {
-    if (mutation.type === "childList") {
-      freeBSD();
-    }
-  }
+  freeBSD();
 };
 
 let chatObserver = new MutationObserver(chatObserverCallback);
+
+const chatSectionObserverConfig = {
+  subtree: true,
+  attributes: true,
+}
 
 const chatSectionObserverCallback = function(mutationsList) {
   for (let mutation of mutationsList) {
     if (mutation.type === "childList") {
       const chatWindows = doc.getElementsByClassName("fbNubFlyout fbDockChatTabFlyout uiContextualLayerParent");
       for (let chatWindow of chatWindows) {
-        chatObserver.observe(chatWindow, observerConfig);
+        chatObserver.observe(chatWindow, chatObserverConfig);
       }
     }
   }
@@ -1215,7 +1216,7 @@ const chatSectionObserverCallback = function(mutationsList) {
 let chatSectionObserver = new MutationObserver(chatSectionObserverCallback)
 
 const chatSection = doc.getElementById("ChatTabsPagelet");
-chatSectionObserver.observe(chatSection, observerConfig);
+chatSectionObserver.observe(chatSection, chatSectionObserverConfig);
 
 function freeBSD() {
   const x = doc.body.getElementsByClassName("_1ift");
@@ -1223,7 +1224,7 @@ function freeBSD() {
     const e = x[i];
       const code = e.src.split("/").pop().split(".")[0];
       const path = urls.find(function(url) {
-        return url.includes(code);
+        return url.includes(code + ".png");
       })
       if (path !== undefined) {
         const newEmoji = preURL + path;

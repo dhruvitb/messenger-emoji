@@ -1,0 +1,2 @@
+Opening a docked chat does not trigger a call to freeBSD
+Make it work on messenger again
