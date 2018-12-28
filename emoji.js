@@ -1221,15 +1221,15 @@ function freeBSD() {
   const x = doc.body.getElementsByClassName("_1ift");
   for (let i = 0; i < x.length; ++i) {
     const e = x[i];
-      const code = e.src.split("/").pop().split(".")[0];
-      const path = urls.find(function(url) {
-        return url.includes(`${code}.png`);
-      })
-      if (path !== undefined) {
-        const newEmoji = preURL + path;
-        if (e.src.substring(18) !== "https://emojipedia") {
-          e.src = newEmoji;
-        }
+    const code = e.src.split("/").pop().split(".")[0];
+    const path = urls.find(function(url) {
+      return url.includes(`${code}.png`);
+    })
+    if (path !== undefined) {
+      const newEmoji = preURL + path;
+      if (e.src.substring(18) !== "https://emojipedia") {
+        e.src = newEmoji;
       }
     }
+  }
 }
