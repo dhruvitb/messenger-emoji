@@ -1223,7 +1223,7 @@ function freeBSD() {
     const e = x[i];
       const code = e.src.split("/").pop().split(".")[0];
       const path = urls.find(function(url) {
-        return url.includes(code);
+        return url.includes(`${code}.png`);
       })
       if (path !== undefined) {
         const newEmoji = preURL + path;
