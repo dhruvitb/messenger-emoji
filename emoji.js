@@ -1183,50 +1183,66 @@ const urls = [
 ];
 
 const doc = window.document;
-const preURL = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/facebook/65/";
+const loc = window.location.host;
 
+const fbChatTabClass = "fbNubFlyout fbDockChatTabFlyout uiContextualLayerParent";
+const fbAllChatTabsClass = "ChatTabsPagelet";
+
+const preURL = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/72/facebook/65/";
+const emojiClass = "_1ift";
 
 const observerConfig = {
   childList: true,
   subtree: true,
 };
 
-const chatObserverCallback = function(mutationsList) {
+const freeBSDCallback = function(mutationsList) {
   for (let mutation of mutationsList) {
     if (mutation.type === "childList") {
       freeBSD();
-    }
-  }
-};
-
-let chatObserver = new MutationObserver(chatObserverCallback);
-
-const chatSectionObserverCallback = function(mutationsList) {
-  for (let mutation of mutationsList) {
-    if (mutation.type === "childList") {
-      const chatWindows = doc.getElementsByClassName("fbNubFlyout fbDockChatTabFlyout uiContextualLayerParent");
-      for (let chatWindow of chatWindows) {
-        chatObserver.observe(chatWindow, observerConfig);
-      }
+      return;
     }
   }
 }
 
-let chatSectionObserver = new MutationObserver(chatSectionObserverCallback)
+if (loc === "www.facebook.com") {
+  const chatObserver = new MutationObserver(freeBSDCallback);
 
-const chatSection = doc.getElementById("ChatTabsPagelet");
-chatSectionObserver.observe(chatSection, observerConfig);
+  const chatSectionObserverCallback = function(mutationsList) {
+    for (let mutation of mutationsList) {
+      if (mutation.type === "childList") {
+        const chatWindows = doc.getElementsByClassName(fbChatTabClass);
+        for (let chatWindow of chatWindows) {
+          chatObserver.observe(chatWindow, observerConfig);
+        }
+        return;
+      }
+    }
+  }
+
+  let chatSectionObserver = new MutationObserver(chatSectionObserverCallback)
+
+  const chatSection = doc.getElementById(fbAllChatTabsClass);
+  chatSectionObserver.observe(chatSection, observerConfig);
+}
+
+if (loc === "www.messenger.com") {
+  const messengerObserver = new MutationObserver(freeBSDCallback);
+
+  messengerObserver.observe(doc, observerConfig);
+}
 
 function freeBSD() {
-  const x = doc.body.getElementsByClassName("_1ift");
-  for (let i = 0; i < x.length; ++i) {
-    const e = x[i];
+  const emojis = doc.body.getElementsByClassName(emojiClass);
+  for (let i = 0; i < emojis.length; ++i) {
+    const e = emojis[i];
     const code = e.src.split("/").pop().split(".")[0];
-    const path = urls.find(function(url) {
+    const path = urls.filter(function(url) {
       return url.includes(`${code}.png`);
     })
-    if (path !== undefined) {
-      const newEmoji = preURL + path;
+    console.log(path);
+    if (path.length !== 0) {
+      const newEmoji = preURL + path[0]; // right now it'll just be the first one so it's equivalent to find()
       if (e.src.substring(18) !== "https://emojipedia") {
         e.src = newEmoji;
       }
