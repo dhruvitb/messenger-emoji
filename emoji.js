@@ -1240,7 +1240,6 @@ function freeBSD() {
     const path = urls.filter(function(url) {
       return url.includes(`${code}.png`);
     })
-    console.log(path);
     if (path.length !== 0) {
       const newEmoji = preURL + path[0]; // right now it'll just be the first one so it's equivalent to find()
       if (e.src.substring(18) !== "https://emojipedia") {
