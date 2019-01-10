@@ -1237,11 +1237,11 @@ function freeBSD() {
   for (let i = 0; i < emojis.length; ++i) {
     const e = emojis[i];
     const code = e.src.split("/").pop().split(".")[0];
-    const path = urls.filter(function(url) {
+    const paths = urls.filter(function(url) {
       return url.includes(`${code}.png`);
     })
-    if (path.length !== 0) {
-      const newEmoji = preURL + path[0]; // right now it'll just be the first one so it's equivalent to find()
+    if (paths.length !== 0) {
+      const newEmoji = preURL + paths[0]; // right now it'll just be the first one so it's equivalent to find()
       if (e.src.substring(18) !== "https://emojipedia") {
         e.src = newEmoji;
       }
